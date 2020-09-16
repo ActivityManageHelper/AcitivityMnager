@@ -86,8 +86,14 @@ public class getUserIdServlet extends HttpServlet {
             {
                 System.out.println("参数为checkin，aty_id为"+aty_id+" 用户想签到");
                 BusinessBean businessBean = new BusinessBean();
-                businessBean.checkin(aty_id,user_id);
-                response.sendRedirect("html/checkin.html");
+                boolean flag = businessBean.checkin(aty_id,user_id);
+                if (flag)
+                {
+                    response.sendRedirect("html/checkin.html");
+                }
+                else {
+                    response.sendRedirect("html/applyfirst.html");
+                }
             }
         }
 
@@ -110,6 +116,7 @@ public class getUserIdServlet extends HttpServlet {
         System.out.println("获取到的UserId=" + result);
         //使用FastJson将Json字符串解析成Json对象
         JSONObject json = JSON.parseObject(result);
+        //非企业成员返回"OpenId":"OPENID"，所以UserId=null
         String UserId = String.valueOf(json.getString("UserId"));
         return UserId;
     }
